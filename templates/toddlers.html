@@ -1,0 +1,209 @@
+<!-- templates/toddlers.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>ASD Detection for Toddlers (1-36 months)</h2>
+    <p>Fill out the questionnaire for ASD detection in toddlers.</p>
+
+    <form action="{{ url_for('toddlers') }}" method="post">
+        <div class="form-group">
+            <label for="age">Age (in months):</label>
+            <input type="number" id="age" name="age" min="1" max="36" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                {% for gender in unique_data.genders %}
+                <option value="{{ gender }}">{{ gender }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ethnicity">Ethnicity:</label>
+            <select id="ethnicity" name="ethnicity" required>
+                {% for ethnicity in unique_data.ethnicities %}
+                <option value="{{ ethnicity }}">{{ ethnicity }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="jundice">Had jaundice?</label>
+            <select id="jundice" name="jundice" required>
+                {% for jundice_val in unique_data.jundice %}
+                <option value="{{ jundice_val }}">{{ jundice_val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="autism">Family member with autism?</label>
+            <select id="autism" name="autism" required>
+                {% for autism_val in unique_data.autism %}
+                <option value="{{ autism_val }}">{{ autism_val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="result">Test result:</label>
+            <input type="number" id="result" name="result" min="0" max="10" step="1" value="0" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="relation">Relation:</label>
+            <select id="relation" name="relation" required>
+                {% for relation in unique_data.relations %}
+                <option value="{{ relation }}">{{ relation }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <h3>Toddler AQ-10 Questionnaire</h3>
+
+        <div class="question">
+            <p>1. Does your toddler look at you when you call his/her name?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A1_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A1_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. Does your toddler make eye contact often?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A2_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A2_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. Does your toddler point to indicate he/she wants something?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A3_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A3_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. Does your toddler point to show interest in something?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A4_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A4_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. Does your toddler engage in pretend play?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A5_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A5_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>6. Does your toddler follow where you are looking?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A6_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A6_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>7. Does your toddler show signs of comfort when someone is visibly upset?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A7_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A7_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>8. Are your toddler's first words typical?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A8_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A8_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>9. Does your toddler use gestures (e.g., waving goodbye)?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A9_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A9_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>10. Does your toddler stare at nothing for no apparent reason?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A10_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A10_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn submit-btn">Detect ASD</button>
+    </form>
+
+    {% if show_result %}
+    <div class="result-box {% if 'has ASD' in prediction %}has-asd{% else %}no-asd{% endif %}">
+        <h3>Detection Result</h3>
+        <p>The model predicts that the individual <strong>{{ prediction }}</strong> with a probability of <strong>{{
+                probability }}%</strong>.</p>
+
+        <h4>What could change this result?</h4>
+        {% if counterfactuals %}
+        <h2>Counterfactual Explanations</h2>
+        <p>These scenarios show how changes in certain features could lead to a different prediction:</p>
+        <table border="1">
+            <tr>
+                {% for key in counterfactuals[0].keys() %}
+                <th>{{ key }}</th>
+                {% endfor %}
+            </tr>
+            {% for cf in counterfactuals %}
+            <tr>
+                {% for value in cf.values() %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% elif counterfactual_message %}
+        <h2>Counterfactual Explanations</h2>
+        <p>{{ counterfactual_message }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all radio buttons for ASD questions
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+        // Add event listener to each radio button
+        radioButtons.forEach(button => {
+            button.addEventListener('change', updateResult);
+        });
+
+        // Function to update the result field
+        function updateResult() {
+            let yesCount = 0;
+
+            // Count all "Yes" answers
+            for (let i = 1; i <= 10; i++) {
+                const yesRadio = document.querySelector(`input[name="A${i}_Score"][value="Yes"]:checked`);
+                if (yesRadio) {
+                    yesCount++;
+                }
+            }
+
+            // Update the result field
+            document.getElementById('result').value = yesCount;
+        }
+    });
+</script>
+{% endblock %}

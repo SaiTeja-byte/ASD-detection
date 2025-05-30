@@ -1,0 +1,218 @@
+<!-- templates/adolescents.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>ASD Detection for Adolescents (12-17 years)</h2>
+    <p>Fill out the questionnaire for ASD detection in adolescents.</p>
+
+    <form action="{{ url_for('adolescents') }}" method="post">
+        <div class="form-group">
+            <label for="age">Age (12-17):</label>
+            <input type="number" id="age" name="age" min="12" max="17" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                {% for gender in unique_data.genders %}
+                <option value="{{ gender }}">{{ gender }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ethnicity">Ethnicity:</label>
+            <select id="ethnicity" name="ethnicity" required>
+                {% for ethnicity in unique_data.ethnicities %}
+                <option value="{{ ethnicity }}">{{ ethnicity }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="jundice">Had jaundice?</label>
+            <select id="jundice" name="jundice" required>
+                {% for jundice_val in unique_data.jundice %}
+                <option value="{{ jundice_val }}">{{ jundice_val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="autism">Family member with autism?</label>
+            <select id="autism" name="autism" required>
+                {% for autism_val in unique_data.autism %}
+                <option value="{{ autism_val }}">{{ autism_val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="contry_of_res">Country of residence:</label>
+            <select id="contry_of_res" name="contry_of_res" required>
+                {% for country in unique_data.countries %}
+                <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="result">Test result:</label>
+            <input type="number" id="result" name="result" min="0" max="10" step="1" value="0" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="relation">Relation:</label>
+            <select id="relation" name="relation" required>
+                {% for relation in unique_data.relations %}
+                <option value="{{ relation }}">{{ relation }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <h3>Adolescent AQ-10 Questionnaire</h3>
+
+        <div class="question">
+            <p>1. Do you often notice patterns in things all the time?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A1_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A1_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. Do you find it hard to understand what someone is thinking or feeling by looking at their face?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A2_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A2_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. Do you prefer to focus on the big picture rather than small details?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A3_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A3_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. Is it difficult to join in conversations with friends?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A4_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A4_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. Do you have specific routines that you need to follow closely?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A5_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A5_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>6. Do you get overwhelmed easily in crowded places?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A6_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A6_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>7. Do you find it hard to make eye contact when talking to someone?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A7_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A7_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>8. Do you often repeat the same phrases or words?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A8_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A8_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>9. Do you struggle to understand jokes or sarcasm?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A9_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A9_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>10. Do you prefer playing alone with objects rather than interacting with other people in imaginative
+                play?</p>
+            <div class="radio-group">
+                <label><input type="radio" name="A10_Score" value="Yes" required> Yes</label>
+                <label><input type="radio" name="A10_Score" value="No"> No</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn submit-btn">Detect ASD</button>
+    </form>
+
+    {% if show_result %}
+    <div class="result-box {% if 'has ASD' in prediction %}has-asd{% else %}no-asd{% endif %}">
+        <h3>Detection Result</h3>
+        <p>The model predicts that the individual <strong>{{ prediction }}</strong> with a probability of <strong>{{
+                probability }}%</strong>.</p>
+
+        <h4>What could change this result?</h4>
+        {% if counterfactuals %}
+        <h2>Counterfactual Explanations</h2>
+        <p>These scenarios show how changes in certain features could lead to a different prediction:</p>
+        <table border="1">
+            <tr>
+                {% for key in counterfactuals[0].keys() %}
+                <th>{{ key }}</th>
+                {% endfor %}
+            </tr>
+            {% for cf in counterfactuals %}
+            <tr>
+                {% for value in cf.values() %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% elif counterfactual_message %}
+        <h2>Counterfactual Explanations</h2>
+        <p>{{ counterfactual_message }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all radio buttons for ASD questions
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+        // Add event listener to each radio button
+        radioButtons.forEach(button => {
+            button.addEventListener('change', updateResult);
+        });
+
+        // Function to update the result field
+        function updateResult() {
+            let yesCount = 0;
+
+            // Count all "Yes" answers
+            for (let i = 1; i <= 10; i++) {
+                const yesRadio = document.querySelector(`input[name="A${i}_Score"][value="Yes"]:checked`);
+                if (yesRadio) {
+                    yesCount++;
+                }
+            }
+
+            // Update the result field
+            document.getElementById('result').value = yesCount;
+        }
+    });
+</script>
+{% endblock %}

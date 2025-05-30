@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASD Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Autism Spectrum Disorder (ASD) Detection System</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('adults') }}">Adults</a></li>
+                <li><a href="{{ url_for('children') }}">Children</a></li>
+                <li><a href="{{ url_for('toddlers') }}">Toddlers</a></li>
+                <li><a href="{{ url_for('adolescents') }}">Adolescents</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <p>ASD Detection System &copy; 2025</p>
+    </footer>
+</body>
+</html>
